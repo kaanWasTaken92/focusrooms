@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FocusRooms • Private Study Rooms</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      background: #0f172a;
+      color: #e5e7eb;
+      font-family: system-ui, sans-serif;
+      margin: 0;
+    }
+
+    /* NAVBAR */
+    nav {
+      background: #1d4ed8;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    nav .links a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #e5e7eb;
+      font-size: 1rem;
+    }
+
+    nav .links a:hover {
+      text-decoration: underline;
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 3rem 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 0.8rem;
+      border: 1px solid #334155;
+      margin-bottom: 1.5rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin-top: 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      padding: 0.7rem 1.4rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      background: #22c55e;
+      color: #052e16;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+
+    .join-btn {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .join-btn:hover {
+      background: #4338ca;
+    }
+
+    .room-box {
+      background: #0f172a;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #334155;
+      margin-top: 1rem;
+    }
+
+    /* MODALS */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 0.8rem;
+      width: 90%;
+      max-width: 400px;
+      border: 1px solid #334155;
+    }
+
+    .close {
+      float: right;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">FocusRooms</div>
+  <div class="links">
+    <a href="#features">Features</a>
+    <a href="#create">Create Room</a>
+    <a href="#join">Join Room</a>
+    <a href="#" onclick="openModal('loginModal')">Sign In</a>
+    <a href="#" onclick="openModal('signupModal')">Sign Up</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="section">
+  <h1>Private Online Study Rooms</h1>
+  <p>Study with friends in private rooms using access codes. Stay focused, stay productive.</p>
+</div>
+
+<!-- FEATURES -->
+<div class="section" id="features">
+  <h2>Features</h2>
+
+  <div class="card">🔒 Private rooms with access codes</div>
+  <div class="card">🎧 Silent or lo-fi study mode</div>
+  <div class="card">⏱ Built-in Pomodoro timers</div>
+  <div class="card">👥 Invite friends securely</div>
+  <div class="card">📱 Works on any device</div>
+</div>
+
+<!-- CREATE ROOM -->
+<div class="section" id="create">
+  <h2>Create a Private Room</h2>
+
+  <div class="card">
+    <label>Room Name</label>
+    <input id="roomName" type="text" placeholder="e.g. Math Revision" />
+
+    <label>Max Members</label>
+    <input id="maxMembers" type="number" min="1" max="20" value="5" />
+
+    <button onclick="createRoom()">Create Room</button>
+
+    <div id="createdRoom" class="room-box" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- JOIN ROOM -->
+<div class="section" id="join">
+  <h2>Join a Room</h2>
+
+  <div class="card">
+    <label>Enter Access Code</label>
+    <input id="joinCode" type="text" placeholder="e.g. X7P9Q2" />
+
+    <button class="join-btn" onclick="joinRoom()">Join Room</button>
+
+    <div id="joinResult" class="room-box" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('loginModal')">&times;</span>
+    <h2>Sign In</h2>
+
+    <label>Email</label>
+    <input type="email" placeholder="you@example.com" />
+
+    <label>Password</label>
+    <input type="password" placeholder="••••••••" />
+
+    <button>Sign In</button>
+  </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div class="modal" id="signupModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('signupModal')">&times;</span>
+    <h2>Create Account</h2>
+
+    <label>Email</label>
+    <input type="email" placeholder="you@example.com" />
+
+    <label>Password</label>
+    <input type="password" placeholder="••••••••" />
+
+    <button>Sign Up</button>
+  </div>
+</div>
+
+<script>
+  /* ROOM SYSTEM */
+  let rooms = {};
+
+  function generateCode() {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let code = "";
+    for (let i = 0; i < 6; i++) {
+      code += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return code;
+  }
+
+  function createRoom() {
+    const name = document.getElementById("roomName").value;
+    const max = document.getElementById("maxMembers").value;
+
+    if (!name) {
+      alert("Please enter a room name.");
+      return;
+    }
+
+    const code = generateCode();
+
+    rooms[code] = {
+      name: name,
+      max: max,
+      members: 1
+    };
+
+    const box = document.getElementById("createdRoom");
+    box.style.display = "block";
+    box.innerHTML = `
+      <strong>Room Created!</strong><br><br>
+      Room Name: ${name}<br>
+      Max Members: ${max}<br>
+      <strong>Access Code: ${code}</strong><br><br>
+      Share this code with your friends.
+    `;
+  }
+
+  function joinRoom() {
+    const code = document.getElementById("joinCode").value.trim().toUpperCase();
+    const box = document.getElementById("joinResult");
+
+    if (!rooms[code]) {
+      box.style.display = "block";
+      box.innerHTML = `<span style="color:#f87171;">Invalid access code.</span>`;
+      return;
+    }
+
+    const room = rooms[code];
+
+    if (room.members >= room.max) {
+      box.style.display = "block";
+      box.innerHTML = `<span style="color:#f87171;">Room is full.</span>`;
+      return;
+    }
+
+    room.members++;
+
+    box.style.display = "block";
+    box.innerHTML = `
+      <strong>Joined Room!</strong><br><br>
+      Room Name: ${room.name}<br>
+      Members: ${room.members} / ${room.max}<br>
+      Access Code: ${code}
+    `;
+  }
+
+  /* MODALS */
+  function openModal(id) {
+    document.getElementById(id).style.display = "flex";
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+  }
+
+  window.onclick = function(e) {
+    document.querySelectorAll(".modal").forEach(modal => {
+      if (e.target === modal) modal.style.display = "none";
+    });
+  };
+</script>
+
+</body>
+</html>
